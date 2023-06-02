@@ -1,0 +1,15 @@
+{
+  "name": "node01",
+  "version": "1.0.0",
+  "description": "DEC-2022-NODEJS-HW",
+  "main": "App.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
