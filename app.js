@@ -74,21 +74,17 @@
 
 
 
-
-
-
-
 //                ==== READ, WRITE, DUPLEX, TRANSFORM - !!! =====
 // // // const zlib = require('node:zlib');
 
 
-
 const express = require('express');
 const app = express();
+const fileService = require('./file.service')
 
 const users = [
   {
-    name: 'Oleh',
+  name: 'Oleh',
   age: 20,
   gender: 'male'
   },
@@ -149,19 +145,26 @@ app.use(express.urlencoded({extended: true}))
 // })
 
 
-app.get('/users', (req, res) => {
-  res.status(200).json(users);
+app.get('/users', async (req, res) => {
+  const users = await fileService.readDB();
+  res.json(users);
 })
 
 app.get('/users/:userId', (req, res) => {
   const {userId} = req.params;
-  console.log(userId);
-  res.status(200).json(users[+userId]);
+  // console.log(userId);
+
+  res.json(users[+userId]);
 })
 
 app.post('/users', (req, res) => {
   // console.log(req.body);
   users.push(req.body);
+
+  let r;
+  if (req.body.age < 0 || r) {
+    throw new Error('FDFSFSKDFJSDKFJKDS');
+  }
 
   res.status(201).json({
     message: 'User created!'
@@ -201,3 +204,4 @@ app.listen(PORT, () => {
 
 
 //                          ==== CRUD ====
+//          create/read/update/delete
