@@ -78,63 +78,63 @@
 // // // const zlib = require('node:zlib');
 
 
+
+
 const express = require('express');
-const app = express();
 const fileService = require('./file.service')
 
-const users = [
-  {
-  name: 'Oleh',
-  age: 20,
-  gender: 'male'
-  },
-  {
-    name: 'Katya',
-    age: 22,
-    gender: 'female'
-  },
-  {
-    name: 'Olha',
-    age: 24,
-    gender: 'female'
-  },
-  {
-    name: 'Oleh',
-    age: 25,
-    gender: 'male'
-  },
-  {
-    name: 'Katya',
-    age: 26,
-    gender: 'female'
-  },
-  {
-    name: 'Oleh',
-    age: 29,
-    gender: 'male'
-  },
-  {
-    name: 'Innokentiy',
-    age: 18,
-    gender: 'male'
-  },
-  {
-    name: 'Olena',
-    age: 44,
-    gender: 'female'
-  },
-  {
-    name: 'Cocos',
-    age: 79,
-    gender: 'female'
-  },
-]
-
+const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 
-
+// const users = [
+//   {
+//   name: 'Oleh',
+//   age: 20,
+//   gender: 'male'
+//   },
+//   {
+//     name: 'Katya',
+//     age: 22,
+//     gender: 'female'
+//   },
+//   {
+//     name: 'Olha',
+//     age: 24,
+//     gender: 'female'
+//   },
+//   {
+//     name: 'Oleh',
+//     age: 25,
+//     gender: 'male'
+//   },
+//   {
+//     name: 'Katya',
+//     age: 26,
+//     gender: 'female'
+//   },
+//   {
+//     name: 'Oleh',
+//     age: 29,
+//     gender: 'male'
+//   },
+//   {
+//     name: 'Innokentiy',
+//     age: 18,
+//     gender: 'male'
+//   },
+//   {
+//     name: 'Olena',
+//     age: 44,
+//     gender: 'female'
+//   },
+//   {
+//     name: 'Cocos',
+//     age: 79,
+//     gender: 'female'
+//   },
+// ]
 
 // app.get('/', (req, res) => {
 // // // //  // console.log('Hello FROM /!')
@@ -143,7 +143,6 @@ app.use(express.urlencoded({extended: true}))
 // //  //   message: 'Hello FROM ///'
 // //  // })
 // })
-
 
 app.get('/users', async (req, res) => {
   const users = await fileService.readDB();

@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Oleh",
+    "age": 20,
+    "gender": "male"
+  },
+  {
+    "name": "Katya",
+    "age": 22,
+    "gender": "female"
+  },
+  {
+    "name": "Olha",
+    "age": 24,
+    "gender": "female"
+  },
+  {
+    "name": "Oleh",
+    "age": 25,
+    "gender": "male"
+  },
+  {
+    "name": "Katya",
+    "age": 26,
+    "gender": "female"
+  },
+  {
+    "name": "Oleh",
+    "age": 29,
+    "gender": "male"
+  },
+  {
+    "name": "Innokentiy",
+    "age": 18,
+    "gender": "male"
+  },
+  {
+    "name": "Olena",
+    "age": 44,
+    "gender": "female"
+  },
+  {
+    "name": "Cocos",
+    "age": 79,
+    "gender": "female"
+  }
+]
