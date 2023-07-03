@@ -149,46 +149,110 @@ app.get('/users', async (req, res) => {
   res.json(users);
 })
 
-app.get('/users/:userId', (req, res) => {
-  const {userId} = req.params;
-  // console.log(userId);
+// app.get('/users/:userId', (req, res) => {
+//   const {userId} = req.params;
+//   // console.log(userId);
+//
+//   res.json(users[+userId]);
+// })
 
-  res.json(users[+userId]);
-})
-
-app.post('/users', (req, res) => {
+app.post('/users', async (req, res) => {
   // console.log(req.body);
-  users.push(req.body);
+  // users.push(req.body);
 
-  let r;
-  if (req.body.age < 0 || r) {
-    throw new Error('FDFSFSKDFJSDKFJKDS');
+  const {name, age} = req.body;
+
+
+  if (!name) {
+    return res.status(400).json('name is wrong');
   }
 
-  res.status(201).json({
-    message: 'User created!'
-  })
+  if (!age || age < 10 || age > 100) {
+    return res.status(400).json('age is wrong');
+  }
+
+  const users  = await fileService.readDB();
+  const newUser = {
+    id: users.length ? users[users.length -1].id + 1 : 1,
+    name,
+    age,
+  }
+
+  users.push(newUser);
+
+  await fileService.writeBD(users);
+
+  // let r;
+  // if (req.body.age < 0 || r) {
+  //   throw new Error('FDFSFSKDFJSDKFJKDS');
+  // }
+
+  res.status(201).json(newUser);
 })
 
-app.put('/users/:userId', (req, res) => {
+app.get('/users/:userId', async (req, res) => {
   const {  userId } = req.params;
 
-  users[+userId] = req.body;
+  const users = await fileService.readDB();
 
-  res.status(200).json({
-    message: 'User updated.',
-    data: users[+userId]
-  })
+ const user = users.find((user) => user.id === +userId);
+
+  // users[+userId] = req.body;
+  if (!user) {
+    return res.status(422).json('user not found');
+  }
+
+  res.json(user);
+  // res.status(200).json(user
+  //     {
+  //   message: 'User updated.',
+  //   data: users[+userId]
+  // })
 })
 
-app.delete('/users/:userId', (req, res) => {
-  const {userId} = req.params;
+app.patch('/users/:userId', async (req, res) => {
+  const { userId } = req.params;
+  const {name, age} = req.body;
 
-  users.splice(+userId, 1);
+  if (name && name.length < 5) {
+    return res.status(400).json('name is wrong');
+  }
+  if (age && (age < 10 || age > 110)) {
+    return res.status(400).json('age is wrong');
+  }
 
-  res.status(200).json({
-    message: 'User deleted.',
-  })
+  const users = await fileService.readDB();
+  // const user = users.find((user) => user.id === +id);
+  const user = users.find((user) => user.id === +userId);
+
+  if (!user) {
+    return res.status(422).json('user not found');
+  }
+  if (name) user.name = name;
+  if (age) user.age = age;
+
+  await fileService.writeBD(users);
+
+  res.sendStatus(201).json(user);
+  // res.status(204);
+})
+
+app.delete('/users/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  const users = await fileService.readDB();
+  // const user = users.find((user) => user.id === +id);
+  const index = users.findIndex((user) => user.id === +userId);
+
+  if (index === -1) {
+    return res.status(422).json('user not found');
+  }
+
+  users.splice(index, 1);
+  await fileService.writeBD(users);
+
+  res.sendStatus(204);
+  // res.status(204);
 })
 
 
