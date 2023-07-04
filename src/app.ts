@@ -84,6 +84,9 @@
 
 
 const express = require('express');
+
+import {Request, Response} from "express";
+
 const app = express();
 
 const users = [
@@ -134,10 +137,8 @@ const users = [
   },
 ]
 
-
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
-
 
 
 // app.get('/', (req, res) => {
@@ -148,18 +149,17 @@ app.use(express.urlencoded({extended: true}))
 // //  // })
 // })
 
-
-app.get('/users', (req, res) => {
+app.get('/users', (req: Request, res: Response) => {
   res.status(200).json(users);
 })
 
-app.get('/users/:userId', (req, res) => {
+app.get('/users/:userId', (req: Request, res: Response) => {
   const {userId} = req.params;
   console.log(userId);
   res.status(200).json(users[+userId]);
 })
 
-app.post('/users', (req, res) => {
+app.post('/users', (req: Request, res: Response) => {
   // console.log(req.body);
   users.push(req.body);
 
@@ -168,7 +168,7 @@ app.post('/users', (req, res) => {
   })
 })
 
-app.put('/users/:userId', (req, res) => {
+app.put('/users/:userId', (req: Request, res: Response) => {
   const {  userId } = req.params;
 
   users[+userId] = req.body;
@@ -179,7 +179,7 @@ app.put('/users/:userId', (req, res) => {
   })
 })
 
-app.delete('/users/:userId', (req, res) => {
+app.delete('/users/:userId', (req: Request, res: Response) => {
   const {userId} = req.params;
 
   users.splice(+userId, 1);
