@@ -1,5 +1,5 @@
 //
-// //             ====EVENTS=========
+// //                              ====EVENTS=========
 //
 // // const events = require('node:events');
 // //
