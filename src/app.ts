@@ -76,10 +76,9 @@
 //SERVER FRAMEWORK
 // // // const zlib = require('node:zlib');
 
-import { Request, Response } from "express";
+import express, { Request, Response } from "express";
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const express = require("express");
+// const express = require("express");
 
 const app = express();
 
