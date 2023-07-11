@@ -77,7 +77,12 @@
 // // // const zlib = require('node:zlib');
 
 import express, { Request, Response } from "express";
+import * as mongoose from "mongoose";
 
+import { configs } from "./configs/config";
+
+// eslint-disable-next-line no-console
+console.log(process.env);
 // const express = require("express");
 
 const app = express();
@@ -182,11 +187,10 @@ app.delete("/users/:userId", (req: Request, res: Response) => {
   });
 });
 
-const PORT = 3999;
-
-app.listen(PORT, () => {
+app.listen(configs.PORT, () => {
+  mongoose.connect(configs.DB_URL);
   // eslint-disable-next-line no-console
-  console.log(`Example app listening on port ${PORT} 😂😂`);
+  console.log(`Example app listening on port ${configs.PORT} 😂😂`);
 });
 //
 //
