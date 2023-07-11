@@ -147,6 +147,7 @@ app.get("/users", (req: Request, res: Response) => {
 
 app.get("/users/:userId", (req: Request, res: Response) => {
   const { userId } = req.params;
+  // eslint-disable-next-line no-console
   console.log(userId);
   res.status(200).json(users[+userId]);
 });
@@ -184,6 +185,7 @@ app.delete("/users/:userId", (req: Request, res: Response) => {
 const PORT = 3999;
 
 app.listen(PORT, () => {
+  // eslint-disable-next-line no-console
   console.log(`Example app listening on port ${PORT} 😂😂`);
 });
 //
