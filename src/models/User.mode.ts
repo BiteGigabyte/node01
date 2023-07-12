@@ -1,10 +1,6 @@
 import { model, Schema } from "mongoose";
 
-export enum EGenders {
-  Male = "male",
-  Female = "female",
-  Other = "Other",
-}
+import { EGenders } from "../enums/user.enum";
 
 const userSchema = new Schema({
   name: {
