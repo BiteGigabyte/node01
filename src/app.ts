@@ -80,6 +80,8 @@ import express, { Request, Response } from "express";
 import * as mongoose from "mongoose";
 
 import { configs } from "./configs/config";
+import { User } from "./models/User.mode";
+import { IUser } from "./types/user.type";
 
 // eslint-disable-next-line no-console
 console.log(process.env);
@@ -87,53 +89,53 @@ console.log(process.env);
 
 const app = express();
 
-const users = [
-  {
-    name: "Oleh",
-    age: 20,
-    gender: "male",
-  },
-  {
-    name: "Katya",
-    age: 22,
-    gender: "female",
-  },
-  {
-    name: "Olha",
-    age: 24,
-    gender: "female",
-  },
-  {
-    name: "Oleh",
-    age: 25,
-    gender: "male",
-  },
-  {
-    name: "Katya",
-    age: 26,
-    gender: "female",
-  },
-  {
-    name: "Oleh",
-    age: 29,
-    gender: "male",
-  },
-  {
-    name: "Innokentiy",
-    age: 18,
-    gender: "male",
-  },
-  {
-    name: "Olena",
-    age: 44,
-    gender: "female",
-  },
-  {
-    name: "Cocos",
-    age: 79,
-    gender: "female",
-  },
-];
+// const users = [
+//   {
+//     name: "Oleh",
+//     age: 20,
+//     gender: "male",
+//   },
+//   {
+//     name: "Katya",
+//     age: 22,
+//     gender: "female",
+//   },
+//   {
+//     name: "Olha",
+//     age: 24,
+//     gender: "female",
+//   },
+//   {
+//     name: "Oleh",
+//     age: 25,
+//     gender: "male",
+//   },
+//   {
+//     name: "Katya",
+//     age: 26,
+//     gender: "female",
+//   },
+//   {
+//     name: "Oleh",
+//     age: 29,
+//     gender: "male",
+//   },
+//   {
+//     name: "Innokentiy",
+//     age: 18,
+//     gender: "male",
+//   },
+//   {
+//     name: "Olena",
+//     age: 44,
+//     gender: "female",
+//   },
+//   {
+//     name: "Cocos",
+//     age: 79,
+//     gender: "female",
+//   },
+// ];
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -145,47 +147,86 @@ app.use(express.urlencoded({ extended: true }));
 // //  //   message: 'Hello FROM ///'
 // //  // })
 // })
- c
-app.get("/users", (req: Request, res: Response) => {
-  res.status(200).json(users);
-});
+app.get(
+  "/users",
+  async (req: Request, res: Response): Promise<Response<IUser[]>> => {
+    try {
+      const users = await User.find();
+      // const users = await User.find().select('-password');
 
-app.get("/users/:userId", (req: Request, res: Response) => {
-  const { userId } = req.params;
-  // eslint-disable-next-line no-console
-  console.log(userId);
-  res.status(200).json(users[+userId]);
-});
+      return res.json(users);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
 
-app.post("/users", (req: Request, res: Response) => {
-  // console.log(req.body);
-  users.push(req.body);
+app.get(
+  "/users/:id",
+  async (req: Request, res: Response): Promise<Response<IUser>> => {
+    try {
+      const user = await User.findById(req.params.id);
 
-  res.status(201).json({
-    message: "User created!",
-  });
-});
+      return res.json(user);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
 
-app.put("/users/:userId", (req: Request, res: Response) => {
-  const { userId } = req.params;
+app.post(
+  "/users",
+  async (req: Request, res: Response): Promise<Response<IUser>> => {
+    // console.log(req.body);
+    // users.push(req.body);
 
-  users[+userId] = req.body;
+    try {
+      const createdUser = await User.create(req.body);
 
-  res.status(200).json({
-    message: "User updated.",
-    data: users[+userId],
-  });
-});
+      return res.status(201).json(createdUser);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
 
-app.delete("/users/:userId", (req: Request, res: Response) => {
-  const { userId } = req.params;
+app.put(
+  "/users/:userId",
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { userId } = req.params;
 
-  users.splice(+userId, 1);
+      // const updatedUser = await User.updateOne({ _id: userId }, { ...req.body });
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: userId },
+        { ...req.body },
+        { returnDocument: "after" }
+      );
 
-  res.status(200).json({
-    message: "User deleted.",
-  });
-});
+      res.status(200).json(updatedUser);
+    } catch (e) {
+      console.log(e);
+    }
+
+    // users[+userId] = req.body;
+  }
+);
+
+app.delete(
+  "/users/:userId",
+  async (req: Request, res: Response): Promise<Response<void>> => {
+    try {
+      const { userId } = req.params;
+
+      // const updatedUser = await User.updateOne({ _id: userId }, { ...req.body });
+      await User.deleteOne({ _id: userId });
+
+      return res.sendStatus(200);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
 
 app.listen(configs.PORT, () => {
   mongoose.connect(configs.DB_URL);
