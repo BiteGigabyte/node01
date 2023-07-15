@@ -76,10 +76,11 @@
 //SERVER FRAMEWORK
 // // // const zlib = require('node:zlib');
 
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import * as mongoose from "mongoose";
 
 import { configs } from "./configs/config";
+import { ApiError } from "./errors";
 import { User } from "./models/User.mode";
 import { IUser } from "./types/user.type";
 import { UserValidator } from "./validators";
@@ -177,7 +178,11 @@ app.get(
 
 app.post(
   "/users",
-  async (req: Request, res: Response): Promise<Response<IUser>> => {
+  async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response<IUser>> => {
     // console.log(req.body);
     // users.push(req.body);
 
@@ -185,23 +190,29 @@ app.post(
       const { error, value } = UserValidator.create.validate(req.body);
 
       if (error) {
-        throw new Error(error.message);
+        throw new ApiError(error.message, 400);
       }
 
       const createdUser = await User.create(value);
 
       return res.status(201).json(createdUser);
     } catch (e) {
-      console.log(e);
+      next(e);
     }
   }
 );
 
 app.put(
   "/users/:userId",
-  async (req: Request, res: Response): Promise<void> => {
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { userId } = req.params;
+
+      const { error } = UserValidator.update.validate(req.body);
+
+      if (error) {
+        throw new ApiError(error.message, 400);
+      }
 
       // const updatedUser = await User.updateOne({ _id: userId }, { ...req.body });
       const updatedUser = await User.findOneAndUpdate(
@@ -212,7 +223,7 @@ app.put(
 
       res.status(200).json(updatedUser);
     } catch (e) {
-      console.log(e);
+      next(e);
     }
     // users[+userId] = req.body;
   }
@@ -220,7 +231,11 @@ app.put(
 
 app.delete(
   "/users/:userId",
-  async (req: Request, res: Response): Promise<Response<void>> => {
+  async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response<void>> => {
     try {
       const { userId } = req.params;
 
@@ -229,10 +244,15 @@ app.delete(
 
       return res.sendStatus(200);
     } catch (e) {
-      console.log(e);
+      next(e);
     }
   }
 );
+
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+  const status = error.status || 500;
+  return res.status(status).json(error.message);
+});
 
 app.listen(configs.PORT, () => {
   mongoose.connect(configs.DB_URL);
