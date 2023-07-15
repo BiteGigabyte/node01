@@ -13,7 +13,7 @@ export class UserValidator {
     .trim()
     .messages({
       "string.empty": "Це поле обов'язкове",
-      "string.email": "Aдрес електронної пошти має невірний формат",
+      "string.email": "Aдрес електронної пошти має невірний формат.",
     });
   static password = Joi.string().regex(regexConstants.PASSWORD).trim();
 
