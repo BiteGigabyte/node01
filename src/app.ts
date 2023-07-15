@@ -82,6 +82,7 @@ import * as mongoose from "mongoose";
 import { configs } from "./configs/config";
 import { User } from "./models/User.mode";
 import { IUser } from "./types/user.type";
+import { UserValidator } from "./validators";
 
 // eslint-disable-next-line no-console
 console.log(process.env);
@@ -181,7 +182,13 @@ app.post(
     // users.push(req.body);
 
     try {
-      const createdUser = await User.create(req.body);
+      const { error, value } = UserValidator.create.validate(req.body);
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      const createdUser = await User.create(value);
 
       return res.status(201).json(createdUser);
     } catch (e) {
