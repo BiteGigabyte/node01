@@ -11,7 +11,7 @@ class UserController {
     res: Response
   ): Promise<Response<IUser[]>> {
     try {
-      const users = await User.find();
+      const users = await User.find().select("password");
       // const users = await User.find().select('-password');
 
       return res.json(users);

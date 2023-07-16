@@ -1,14 +1,12 @@
-import { NextFunction, Request, Response, Router } from "express";
+import { Router } from "express";
 
 import { userController } from "../controllers/user.controller";
-import { ApiError } from "../errors";
-import { User } from "../models/User.mode";
-import { IUser } from "../types/user.type";
-import { UserValidator } from "../validators";
 
 const router = Router();
 
-router.get("/", userController.findAll
+router.get(
+  "/",
+  userController.findAll
   // async (req: Request, res: Response): Promise<Response<IUser[]>> => {
   //   try {
   //     const users = await User.find();
