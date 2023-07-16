@@ -4,6 +4,7 @@ import { ApiError } from "../errors";
 import { User } from "../models/User.mode";
 import { IUser } from "../types/user.type";
 import { UserValidator } from "../validators";
+import {userService} from "../services/user.service";
 
 class UserController {
   public async findAll(
@@ -11,7 +12,7 @@ class UserController {
     res: Response
   ): Promise<Response<IUser[]>> {
     try {
-      const users = await User.find().select("password");
+      const users = await userService.findAll();
       // const users = await User.find().select('-password');
 
       return res.json(users);
