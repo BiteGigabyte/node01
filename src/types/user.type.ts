@@ -9,4 +9,14 @@ export interface IUser {
   gender: string;
   email: string;
   password: string;
+
+  // _id: Types.ObjectId;
+  // name?: string;
+  // age?: number;
+  // gender?: string;
+  // email: string;
+  // password: string;
 }
+
+
+export type IUserWithoutPassword = Omit<IUser, "password">

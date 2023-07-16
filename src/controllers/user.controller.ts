@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from "express";
 
 import { ApiError } from "../errors";
 import { User } from "../models/User.mode";
+import { userService } from "../services/user.service";
 import { IUser } from "../types/user.type";
 import { UserValidator } from "../validators";
-import {userService} from "../services/user.service";
 
 class UserController {
   public async findAll(
@@ -37,7 +37,7 @@ class UserController {
           throw new ApiError(error.message, 400);
         }
 
-        const createdUser = await User.create(value);
+        const createdUser = await userService.create(value);
 
         return res.status(201).json(createdUser);
       } catch (e) {
@@ -48,7 +48,7 @@ class UserController {
 
   public async findById(req: Request, res: Response): Promise<Response<IUser>> {
     try {
-      const user = await User.findById(req.params.id);
+      const user = await userService.findById(req.params.id);
 
       return res.json(user);
     } catch (e) {
