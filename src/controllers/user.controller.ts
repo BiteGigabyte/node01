@@ -22,14 +22,15 @@ class UserController {
   }
 
   public async create(
-    req: any,
+    req: Request,
     res: Response,
     next: NextFunction
   ): Promise<Response<IUser>> {
     try {
       // console.log(req.body);
       // users.push(req.body);
-      const createdUser = await userService.create(req.user);
+
+      const createdUser = await userService.create(req.res.locals as IUser);
 
       return res.status(201).json(createdUser);
     } catch (e) {
