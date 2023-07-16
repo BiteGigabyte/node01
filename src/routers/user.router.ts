@@ -4,21 +4,23 @@ import { ApiError } from "../errors";
 import { User } from "../models/User.mode";
 import { IUser } from "../types/user.type";
 import { UserValidator } from "../validators";
+import {userController} from "../controllers/user.controller";
 
 const router = Router();
 
 router.get(
   "/",
-  async (req: Request, res: Response): Promise<Response<IUser[]>> => {
-    try {
-      const users = await User.find();
-      // const users = await User.find().select('-password');
-
-      return res.json(users);
-    } catch (e) {
-      console.log(e);
-    }
-  }
+  userController.findAll
+  // async (req: Request, res: Response): Promise<Response<IUser[]>> => {
+  //   try {
+  //     const users = await User.find();
+  //     // const users = await User.find().select('-password');
+  //
+  //     return res.json(users);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }
 );
 
 router.get(
