@@ -22,27 +22,18 @@ class UserController {
   }
 
   public async create(
-    req: Request,
+    req: any,
     res: Response,
     next: NextFunction
   ): Promise<Response<IUser>> {
-    {
+    try {
       // console.log(req.body);
       // users.push(req.body);
+      const createdUser = await userService.create(req.user);
 
-      try {
-        const { error, value } = UserValidator.create.validate(req.body);
-
-        if (error) {
-          throw new ApiError(error.message, 400);
-        }
-
-        const createdUser = await userService.create(value);
-
-        return res.status(201).json(createdUser);
-      } catch (e) {
-        next(e);
-      }
+      return res.status(201).json(createdUser);
+    } catch (e) {
+      next(e);
     }
   }
 
